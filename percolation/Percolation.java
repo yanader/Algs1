@@ -39,6 +39,7 @@ public class Percolation {
 
     // opens the site (row, col) if it is not open already
     public void open(int row, int col) {
+        // This isn't quite right because we have a dummy row/col. For example 1,2 doesn't error on a size of 1.
         if (!validCoordinates(row, col)) {
             throw new IllegalArgumentException("Invalid Coordinates");
         }
@@ -51,6 +52,9 @@ public class Percolation {
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
+        if (!validCoordinates(row, col)) {
+            throw new IllegalArgumentException("Invalid Coordinates");
+        }
         return sites[row][col];
     }
 
@@ -73,7 +77,6 @@ public class Percolation {
     }
 
     private void connectOpenedSite(int x, int y) {
-        // TODO: connect opened sites in the weighted quick union at position x,y converted to 1 dimensional
         if (x == 1) {
             ufOpenSiteConnections.union(topSite, rowColToOneDimensional(x, y));
         }
@@ -112,8 +115,17 @@ public class Percolation {
 
     // test client (optional)
     public static void main(String[] args) {
-        Percolation p = new Percolation(19);
-        System.out.println(p.sites[1][1]);
+        Percolation p = new Percolation(3);
+        p.open(1, 1);
+        System.out.println(p.percolates());
+        p.open(2, 1);
+        System.out.println(p.percolates());
+        p.open(3, 1);
+        System.out.println(p.percolates());
+        // p.open(1, 1);
+        // System.out.println(p.percolates());
+        System.out.println("2, 2 is open: " + p.isOpen(2, 2));
+        System.out.println("1, 3 is full: " + p.isFull(1, 3));
 
     }
 }
