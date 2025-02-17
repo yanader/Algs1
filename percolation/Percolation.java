@@ -9,11 +9,10 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
 
     // The structure here is that we use a 2d array to track which sites are actually open or closed
-    // We use the WeightedQuickUnionUF data type to track connections between sites. (One for open and one for full)
-    // In this case =   "open" is that the site has opened
-    //                  "full" is that water has managed to reach it because it is connected to the "top" virtual site.
+    // We use the WeightedQuickUnionUF data type to track connections between sites.
+    // The 2D array has a "dead" row and column so that coordinates start at 1, 1 but the WeightQuickUnion
+    // Data type does not (so is instantiated with "n" (instead of n + 1 like in the 2D array)
 
-    // I will need some helper functions to do things like translate coordinates into a 1 dimensional coordinate (and maybe vice versa)
 
     private boolean[][] sites;
     private int sideLength;
@@ -23,6 +22,8 @@ public class Percolation {
     private int bottomSite;
     private WeightedQuickUnionUF ufOpenSiteConnections;
     private WeightedQuickUnionUF ufFilledSiteConnections;
+    // My old solution never had this in it, I don't think we need this
+    // We just need to check where top and bottom site and connected in the "open" weighted quick union
 
 
     // creates n-by-n grid, with all sites initially blocked
@@ -36,9 +37,8 @@ public class Percolation {
         openSiteCount = 0;
         topSite = 0;
         bottomSite = n * n + 2
-                - 1; // bottom relares only to the index of the bottom site in the WeightedQuickUnionUF (Not in the 2d array)
+                - 1; // bottom relates only to the index of the bottom site in the WeightedQuickUnionUF (Not in the 2d array)
         ufOpenSiteConnections = new WeightedQuickUnionUF(n * n + 2);
-        ufFilledSiteConnections = new WeightedQuickUnionUF(n * n + 2);
 
     }
 
@@ -79,13 +79,15 @@ public class Percolation {
     }
 
     private int rowColToOneDimensional(int x, int y) {
-        // TODO: convert the x, y coordinate provide (from sites) to the index that can be used in the weighted quick union
-        return -1;
+        // I'm removing 1 from x here to account for the fact that the user will give a row number instead of a strict index
+        // It's possible that I may need to remove one from y to achieve the same thing in the other dimension.
+        return ((x - 1) * sideLength) + y;
     }
 
     private boolean validCoordinates(int x, int y) {
         return x >= 1 && y >= 1 && x <= sideLength && y <= sideLength;
     }
+
 
     // test client (optional)
     public static void main(String[] args) {
