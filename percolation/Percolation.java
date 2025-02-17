@@ -13,7 +13,6 @@ public class Percolation {
     // The 2D array has a "dead" row and column so that coordinates start at 1, 1 but the WeightQuickUnion
     // Data type does not (so is instantiated with "n" (instead of n + 1 like in the 2D array)
 
-
     private boolean[][] sites;
     private int sideLength;
     private int openSiteCount;
@@ -21,9 +20,6 @@ public class Percolation {
     // This and the attribute below represent the top ad bottom sites in the 1D array/WeightQuickUnionUF
     private int bottomSite;
     private WeightedQuickUnionUF ufOpenSiteConnections;
-    private WeightedQuickUnionUF ufFilledSiteConnections;
-    // My old solution never had this in it, I don't think we need this
-    // We just need to check where top and bottom site and connected in the "open" weighted quick union
 
 
     // creates n-by-n grid, with all sites initially blocked
@@ -31,13 +27,12 @@ public class Percolation {
         if (n <= 0) {
             throw new IllegalArgumentException("Illegal grid size");
         }
-        // There will need to be an adjustment made for the fact that we want to act from index 1 (check spec)
         sites = new boolean[n + 1][n + 1];
         sideLength = n;
         openSiteCount = 0;
         topSite = 0;
-        bottomSite = n * n + 2
-                - 1; // bottom relates only to the index of the bottom site in the WeightedQuickUnionUF (Not in the 2d array)
+        // bottom relates only to the index of the bottom site in the WeightedQuickUnionUF (Not in the 2d array)
+        bottomSite = n * n + 2 - 1;
         ufOpenSiteConnections = new WeightedQuickUnionUF(n * n + 2);
 
     }
@@ -71,7 +66,9 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return false;
+        // .connected is a deprecated method but would achieve the same thing.
+        // return ufOpenSiteConnections.connected(topSite, bottomSite);
+        return ufOpenSiteConnections.find(topSite) == ufOpenSiteConnections.find(bottomSite);
     }
 
     private void connectOpenedSite(int x, int y) {
