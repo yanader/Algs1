@@ -73,6 +73,29 @@ public class Percolation {
 
     private void connectOpenedSite(int x, int y) {
         // TODO: connect opened sites in the weighted quick union at position x,y converted to 1 dimensional
+        if (x == 1) {
+            ufOpenSiteConnections.union(topSite, rowColToOneDimensional(x, y));
+        }
+        if (x == sideLength) {
+            ufOpenSiteConnections.union(rowColToOneDimensional(x, y), bottomSite);
+        }
+        if (validCoordinates(x - 1, y) && isOpen(x - 1, y)) {
+            ufOpenSiteConnections.union(rowColToOneDimensional(x, y),
+                                        rowColToOneDimensional(x - 1, y));
+        }
+        if (validCoordinates(x + 1, y) && isOpen(x + 1, y)) {
+            ufOpenSiteConnections.union(rowColToOneDimensional(x, y),
+                                        rowColToOneDimensional(x + 1, y));
+        }
+        if (validCoordinates(x, y - 1) && isOpen(x, y - 1)) {
+            ufOpenSiteConnections.union(rowColToOneDimensional(x, y),
+                                        rowColToOneDimensional(x, y - 1));
+        }
+        if (validCoordinates(x, y + 1) && isOpen(x, y + 1)) {
+            ufOpenSiteConnections.union(rowColToOneDimensional(x, y),
+                                        rowColToOneDimensional(x, y + 1));
+        }
+
     }
 
     private int rowColToOneDimensional(int x, int y) {
