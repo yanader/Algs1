@@ -14,6 +14,8 @@ public class PercolationStats {
     private int size;
     private int t;
     private double stdDevConstant;
+    private double stdDev;
+    private double mean;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
@@ -22,14 +24,15 @@ public class PercolationStats {
         }
         else {
             stdDevConstant = 1.96;
-            size = n;
-            t = trials;
-            thresholds = new double[trials];
+            this.size = n;
+            this.t = trials;
+            this.thresholds = new double[trials];
             for (int i = 0; i < trials; i++) {
                 thresholds[i] = runTrial(n);
             }
-
         }
+        this.stdDev = StdStats.stddev(thresholds);
+        this.mean = StdStats.mean(thresholds);
     }
 
     private double runTrial(int n) {
@@ -49,12 +52,12 @@ public class PercolationStats {
 
     // sample mean of percolation threshold
     public double mean() {
-        return StdStats.mean(thresholds);
+        return this.mean;
     }
 
     // sample standard deviation of percolation threshold
     public double stddev() {
-        return StdStats.stddev(thresholds);
+        return this.stdDev;
     }
 
     // low endpoint of 95% confidence interval
@@ -68,7 +71,7 @@ public class PercolationStats {
     }
 
     private double stdDevSquared() {
-        return StdStats.stddev(thresholds) * StdStats.stddev(thresholds);
+        return this.stdDev * this.stdDev;
     }
 
     // test client (see below)
