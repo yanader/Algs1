@@ -8,19 +8,12 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
-    // The structure here is that we use a 2d array to track which sites are actually open or closed
-    // We use the WeightedQuickUnionUF data type to track connections between sites.
-    // The 2D array has a "dead" row and column so that coordinates start at 1, 1 but the WeightQuickUnion
-    // Data type does not (so is instantiated with "n" (instead of n + 1 like in the 2D array)
-
     private boolean[][] sites;
     private int sideLength;
     private int openSiteCount;
     private int topSite;
-    // This and the attribute below represent the top ad bottom sites in the 1D array/WeightQuickUnionUF
     private int bottomSite;
     private WeightedQuickUnionUF ufOpenSiteConnections;
-
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
@@ -31,7 +24,6 @@ public class Percolation {
         sideLength = n;
         openSiteCount = 0;
         topSite = 0;
-        // bottom relates only to the index of the bottom site in the WeightedQuickUnionUF (Not in the 2d array)
         bottomSite = n * n + 2 - 1;
         ufOpenSiteConnections = new WeightedQuickUnionUF(n * n + 2);
 
@@ -39,11 +31,10 @@ public class Percolation {
 
     // opens the site (row, col) if it is not open already
     public void open(int row, int col) {
-        // This isn't quite right because we have a dummy row/col. For example 1,2 doesn't error on a size of 1.
         if (!validCoordinates(row, col)) {
             throw new IllegalArgumentException("Invalid Coordinates");
         }
-        else {
+        else if (!isOpen(row, col)) {
             sites[row][col] = true;
             openSiteCount++;
             connectOpenedSite(row, col);
@@ -60,6 +51,9 @@ public class Percolation {
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
+        if (!validCoordinates(row, col)) {
+            throw new IllegalArgumentException("Invalid Coordinates");
+        }
         return ufOpenSiteConnections.find(topSite) == ufOpenSiteConnections.find(
                 rowColToOneDimensional(row, col));
     }
@@ -71,8 +65,6 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        // .connected is a deprecated method but would achieve the same thing.
-        // return ufOpenSiteConnections.connected(topSite, bottomSite);
         return ufOpenSiteConnections.find(topSite) == ufOpenSiteConnections.find(bottomSite);
     }
 
@@ -103,8 +95,6 @@ public class Percolation {
     }
 
     private int rowColToOneDimensional(int x, int y) {
-        // I'm removing 1 from x here to account for the fact that the user will give a row number instead of a strict index
-        // It's possible that I may need to remove one from y to achieve the same thing in the other dimension.
         return ((x - 1) * sideLength) + y;
     }
 
@@ -122,8 +112,6 @@ public class Percolation {
         System.out.println(p.percolates());
         p.open(3, 1);
         System.out.println(p.percolates());
-        // p.open(1, 1);
-        // System.out.println(p.percolates());
         System.out.println("2, 2 is open: " + p.isOpen(2, 2));
         System.out.println("1, 3 is full: " + p.isFull(1, 3));
 
