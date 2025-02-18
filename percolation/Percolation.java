@@ -8,12 +8,18 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
+    // To solve backwash I want to use a second WQU so I have one for open sites and one for full sites
+    // I should open them at the same rate but use the appropriate one for returning info
+    // on what is full (presumably the FULL one does not have a bottom site and can properly report
+    // What is connected to the top and the OPEN one will report whether the system percolates
+
     private boolean[][] sites;
     private int sideLength;
     private int openSiteCount;
     private int topSite;
     private int bottomSite;
     private WeightedQuickUnionUF ufOpenSiteConnections;
+    private WeightedQuickUnionUF ufFullSiteConnections;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
@@ -26,6 +32,7 @@ public class Percolation {
         topSite = 0;
         bottomSite = n * n + 2 - 1;
         ufOpenSiteConnections = new WeightedQuickUnionUF(n * n + 2);
+        ufFullSiteConnections = new WeightedQuickUnionUF(n * n + 1);
 
     }
 
@@ -54,7 +61,7 @@ public class Percolation {
         if (!validCoordinates(row, col)) {
             throw new IllegalArgumentException("Invalid Coordinates");
         }
-        return ufOpenSiteConnections.find(topSite) == ufOpenSiteConnections.find(
+        return ufFullSiteConnections.find(topSite) == ufFullSiteConnections.find(
                 rowColToOneDimensional(row, col));
     }
 
@@ -71,6 +78,7 @@ public class Percolation {
     private void connectOpenedSite(int x, int y) {
         if (x == 1) {
             ufOpenSiteConnections.union(topSite, rowColToOneDimensional(x, y));
+            ufFullSiteConnections.union(topSite, rowColToOneDimensional(x, y));
         }
         if (x == sideLength) {
             ufOpenSiteConnections.union(rowColToOneDimensional(x, y), bottomSite);
@@ -78,17 +86,25 @@ public class Percolation {
         if (validCoordinates(x - 1, y) && isOpen(x - 1, y)) {
             ufOpenSiteConnections.union(rowColToOneDimensional(x, y),
                                         rowColToOneDimensional(x - 1, y));
+            ufFullSiteConnections.union(rowColToOneDimensional(x, y),
+                                        rowColToOneDimensional(x - 1, y));
         }
         if (validCoordinates(x + 1, y) && isOpen(x + 1, y)) {
             ufOpenSiteConnections.union(rowColToOneDimensional(x, y),
+                                        rowColToOneDimensional(x + 1, y));
+            ufFullSiteConnections.union(rowColToOneDimensional(x, y),
                                         rowColToOneDimensional(x + 1, y));
         }
         if (validCoordinates(x, y - 1) && isOpen(x, y - 1)) {
             ufOpenSiteConnections.union(rowColToOneDimensional(x, y),
                                         rowColToOneDimensional(x, y - 1));
+            ufFullSiteConnections.union(rowColToOneDimensional(x, y),
+                                        rowColToOneDimensional(x, y - 1));
         }
         if (validCoordinates(x, y + 1) && isOpen(x, y + 1)) {
             ufOpenSiteConnections.union(rowColToOneDimensional(x, y),
+                                        rowColToOneDimensional(x, y + 1));
+            ufFullSiteConnections.union(rowColToOneDimensional(x, y),
                                         rowColToOneDimensional(x, y + 1));
         }
 
