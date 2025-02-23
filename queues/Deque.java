@@ -1,6 +1,3 @@
-import edu.princeton.cs.algs4.StdIn;
-import edu.princeton.cs.algs4.StdOut;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -80,12 +77,14 @@ public class Deque<Item> implements Iterable<Item> {
     public Item removeFirst() {
         if (isEmpty()) throw new NoSuchElementException("No element exists");
         Item item = first.item;
+
         if (first.next != null) {
             first = first.next;
             first.previous = null;
         }
         else {
             first = null;
+            last = null;
         }
         size--;
         if (size < 2) {
@@ -139,17 +138,25 @@ public class Deque<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
-        Deque<String> dq = new Deque<String>();
-        while (!StdIn.isEmpty()) {
-            dq.addFirst(StdIn.readString());
+        Deque<Integer> deque = new Deque<>();
+
+        // My first issue is in the next two lines. My deque is adding '1' to the front of the empty queue but then EITHER
+        // Not properly setting up previous and enxt
+        // OR
+        // Not properly removing first when it is a queue that only has one item.
+
+        // This is the first thing that I need to fix.
+        deque.addFirst(1);
+        deque.removeFirst(); //     ==> 1
 
 
+        deque.addFirst(3);
+        deque.iterator(); //    ==> [3, 1]
+
+        for (int i : deque) {
+            System.out.println(i);
         }
-        StdOut.println("(Size: " + dq.size() + ")");
-        for (String s : dq) {
-            StdOut.println(s);
-        }
-        StdOut.println("(Size: " + dq.size() + ")");
+
 
     }
 
