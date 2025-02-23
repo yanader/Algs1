@@ -93,7 +93,14 @@ public class Deque<Item> implements Iterable<Item> {
 
     // remove and return the item from the back
     public Item removeLast() {
-        return null;
+        if (this.size == 0) {
+            throw new NoSuchElementException("The queue is empty");
+        }
+        Node returnNode = this.last;
+        this.last.previous.next = null;
+        
+        this.size--;
+        return returnNode.item;
     }
 
     // return an iterator over items in order from front to back
