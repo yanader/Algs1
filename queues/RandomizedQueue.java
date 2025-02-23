@@ -1,3 +1,4 @@
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
@@ -81,18 +82,31 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // return an independent iterator over items in random order
     public Iterator<Item> iterator() {
-        // TODO build as inner class.
         return new RandomizedIterator();
     }
 
     private class RandomizedIterator implements Iterator<Item> {
 
+        private Item[] shuffledArray;
+        private int current = 0;
+        private int length;
+
+        public RandomizedIterator() {
+            shuffledArray = (Item[]) new Object[size()];
+            length = shuffledArray.length;
+            for (int i = 0; i < length; i++) {
+                shuffledArray[i] = queue[i];
+            }
+            StdRandom.shuffle(shuffledArray);
+        }
+
         public boolean hasNext() {
-            return false;
+            return current < length;
         }
 
         public Item next() {
-            return null;
+            if (!hasNext()) throw new NoSuchElementException("No next element");
+            return shuffledArray[current++];
         }
 
         public void remove() {
@@ -102,7 +116,16 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
-
+        int n = 5;
+        RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
+        for (int i = 0; i < n; i++) {
+            queue.enqueue(i);
+        }
+        for (int a : queue) {
+            for (int b : queue) {
+                StdOut.print(a + "-" + b + " ");
+                StdOut.println();
+            }
+        }
     }
-
 }
