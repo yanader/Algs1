@@ -5,6 +5,7 @@
  **************************************************************************** */
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class Deque<Item> implements Iterable<Item> {
 
@@ -80,7 +81,14 @@ public class Deque<Item> implements Iterable<Item> {
 
     // remove and return the item from the front
     public Item removeFirst() {
-        return null;
+        if (this.size == 0) {
+            throw new NoSuchElementException("The queue is empty");
+        }
+        Node returnNode = this.first;
+        this.first.next.previous = null;
+
+        this.size--;
+        return returnNode.item;
     }
 
     // remove and return the item from the back
