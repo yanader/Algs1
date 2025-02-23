@@ -1,3 +1,6 @@
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -136,22 +139,17 @@ public class Deque<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
-
-        Deque<String> d = new Deque<>();
-
-        d.addFirst("One");
-        d.addLast("Two");
-        d.addFirst("Three");
-        d.addLast("Four");
-        System.out.println(d.removeLast());
-        System.out.println(d.removeFirst());
-        System.out.println("The queue is empty: " + d.isEmpty());
-        System.out.println("The size of the queue: " + d.size());
+        Deque<String> dq = new Deque<String>();
+        while (!StdIn.isEmpty()) {
+            dq.addFirst(StdIn.readString());
 
 
-        for (String s : d) {
-            System.out.println(s);
         }
+        StdOut.println("(Size: " + dq.size() + ")");
+        for (String s : dq) {
+            StdOut.println(s);
+        }
+        StdOut.println("(Size: " + dq.size() + ")");
 
     }
 
