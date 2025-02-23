@@ -1,9 +1,3 @@
-/* *****************************************************************************
- *  Name:
- *  Date:
- *  Description:
- **************************************************************************** */
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -40,9 +34,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     // add the item to the front
     public void addFirst(Item item) {
-        if (item == null) {
-            throw new IllegalArgumentException("null item can not be added");
-        }
+        if (item == null) throw new IllegalArgumentException("null item can not be added");
         Node oldFirst = first;
         first = new Node();
         first.item = item;
@@ -63,40 +55,58 @@ public class Deque<Item> implements Iterable<Item> {
 
     // add the item to the back
     public void addLast(Item item) {
-        if (item == null) {
-            throw new IllegalArgumentException("null item can not be added");
+        if (item == null) throw new IllegalArgumentException("null item can not be added");
+        Node oldlast = last;
+        last = new Node();
+        last.item = item;
+        last.previous = oldlast;
+        last.next = null;
+
+        if (last.previous != null) {
+            last.previous.next = last;
         }
-        Node newNode = new Node();
-        newNode.item = item;
-        newNode.previous = this.last;
-        newNode.next = null;
-        last = newNode;
 
-        this.size++;
+        size++;
 
-        if (this.size < 2) {
-            last = first;
+        if (size < 2) {
+            first = last;
         }
     }
 
     // remove and return the item from the front
     public Item removeFirst() {
-        if (this.size == 0) throw new NoSuchElementException("The queue is empty");
-        Node returnNode = this.first;
-        this.first.next.previous = null;
-
-        this.size--;
-        return returnNode.item;
+        if (isEmpty()) throw new NoSuchElementException("No element exists");
+        Item item = first.item;
+        if (first.next != null) {
+            first = first.next;
+            first.previous = null;
+        }
+        else {
+            first = null;
+        }
+        size--;
+        if (size < 2) {
+            first = last;
+        }
+        return item;
     }
 
     // remove and return the item from the back
     public Item removeLast() {
-        if (this.size == 0) throw new NoSuchElementException("The queue is empty");
-        Node returnNode = this.last;
-        this.last.previous.next = null;
-
-        this.size--;
-        return returnNode.item;
+        if (isEmpty()) throw new NoSuchElementException("No element exists");
+        Item item = last.item;
+        if (last.previous != null) {
+            last = last.previous;
+            last.next = null;
+        }
+        else {
+            last = null;
+        }
+        size--;
+        if (size < 2) {
+            first = last;
+        }
+        return item;
     }
 
     // return an iterator over items in order from front to back
@@ -129,19 +139,19 @@ public class Deque<Item> implements Iterable<Item> {
 
         Deque<String> d = new Deque<>();
 
-        d.addFirst("SecondAdded");
-        d.addFirst("Ste");
-        d.addFirst("Joy");
-        d.addFirst("cros");
-        d.addFirst("FirstAdded");
-        String words = d.removeLast();
+        d.addFirst("One");
+        d.addLast("Two");
+        d.addFirst("Three");
+        d.addLast("Four");
+        System.out.println(d.removeLast());
+        System.out.println(d.removeFirst());
+        System.out.println("The queue is empty: " + d.isEmpty());
+        System.out.println("The size of the queue: " + d.size());
+
 
         for (String s : d) {
             System.out.println(s);
         }
-
-
-        System.out.println(words);
 
     }
 
