@@ -81,9 +81,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     // remove and return the item from the front
     public Item removeFirst() {
-        if (this.size == 0) {
-            throw new NoSuchElementException("The queue is empty");
-        }
+        if (this.size == 0) throw new NoSuchElementException("The queue is empty");
         Node returnNode = this.first;
         this.first.next.previous = null;
 
@@ -93,23 +91,57 @@ public class Deque<Item> implements Iterable<Item> {
 
     // remove and return the item from the back
     public Item removeLast() {
-        if (this.size == 0) {
-            throw new NoSuchElementException("The queue is empty");
-        }
+        if (this.size == 0) throw new NoSuchElementException("The queue is empty");
         Node returnNode = this.last;
         this.last.previous.next = null;
-        
+
         this.size--;
         return returnNode.item;
     }
 
     // return an iterator over items in order from front to back
     public Iterator<Item> iterator() {
-        return null;
+        return new LinkedIterator();
+    }
+
+    private class LinkedIterator implements Iterator<Item> {
+
+        private Node current = first;
+
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        public Item next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            Item item = current.item;
+            current = current.next;
+            return item;
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException("remove() has not been implemented");
+        }
     }
 
     // unit testing (required)
     public static void main(String[] args) {
+
+        Deque<String> d = new Deque<>();
+
+        d.addFirst("SecondAdded");
+        d.addFirst("Ste");
+        d.addFirst("Joy");
+        d.addFirst("cros");
+        d.addFirst("FirstAdded");
+        String words = d.removeLast();
+
+        for (String s : d) {
+            System.out.println(s);
+        }
+
+
+        System.out.println(words);
 
     }
 
