@@ -1,4 +1,3 @@
-import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
@@ -54,7 +53,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // return a random item (but do not remove it)
     public Item sample() {
         if (isEmpty()) throw new NoSuchElementException("The queue is empty");
-        return queue[StdRandom.uniformInt(tail - 1)];
+        return queue[StdRandom.uniformInt(this.tail)];
     }
 
     private void swapItems(int x, int y) {
@@ -116,16 +115,21 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
-        int n = 5;
-        RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
-        for (int i = 0; i < n; i++) {
-            queue.enqueue(i);
-        }
-        for (int a : queue) {
-            for (int b : queue) {
-                StdOut.print(a + "-" + b + " ");
-                StdOut.println();
-            }
-        }
+        // int n = 5;
+        // RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
+        // for (int i = 0; i < n; i++) {
+        //     queue.enqueue(i);
+        // }
+        // for (int a : queue) {
+        //     for (int b : queue) {
+        //         StdOut.print(a + "-" + b + " ");
+        //         StdOut.println();
+        //     }
+        // }
+
+        RandomizedQueue<Integer> queue = new RandomizedQueue<>();
+        queue.enqueue(3);
+        System.out.println(queue.sample());
+
     }
 }
