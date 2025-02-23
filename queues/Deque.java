@@ -14,10 +14,10 @@ public class Deque<Item> implements Iterable<Item> {
     private Node last;
 
     // Inner class
-    private class Node<Item> {
+    private class Node {
         private Item item;
-        private Node<Item> next;
-        private Node<Item> previous;
+        private Node next;
+        private Node previous;
     }
 
     // construct an empty deque
@@ -29,22 +29,53 @@ public class Deque<Item> implements Iterable<Item> {
 
     // is the deque empty?
     public boolean isEmpty() {
-        return false;
+        return this.size == 0;
     }
 
     // return the number of items on the deque
     public int size() {
-        return -1;
+        return this.size;
     }
 
     // add the item to the front
     public void addFirst(Item item) {
+        if (item == null) {
+            throw new IllegalArgumentException("null item can not be added");
+        }
+        Node oldFirst = first;
+        first = new Node();
+        first.item = item;
+        first.next = oldFirst;
+        first.previous = null;
 
+        // Make the old first Node's previous point to the new first Node
+        if (first.next != null) {
+            first.next.previous = first;
+        }
+
+        this.size++;
+
+        if (this.size < 2) {
+            last = first;
+        }
     }
 
     // add the item to the back
     public void addLast(Item item) {
+        if (item == null) {
+            throw new IllegalArgumentException("null item can not be added");
+        }
+        Node newNode = new Node();
+        newNode.item = item;
+        newNode.previous = this.last;
+        newNode.next = null;
+        last = newNode;
 
+        this.size++;
+
+        if (this.size < 2) {
+            last = first;
+        }
     }
 
     // remove and return the item from the front
