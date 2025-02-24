@@ -1,3 +1,4 @@
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
@@ -29,7 +30,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // add the item
     public void enqueue(Item item) {
         if (item == null) throw new IllegalArgumentException("null argument");
-        if (queue.length == tail) {
+        if (queue.length == size) {
             grow();
         }
         queue[tail++] = item;
@@ -40,9 +41,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public Item dequeue() {
         if (isEmpty()) throw new NoSuchElementException("The queue is empty");
         int r = StdRandom.uniformInt(this.tail);
-        swapItems(r, tail - 1);
+        swapItems(r, this.tail - 1);
         Item returnItem = queue[tail - 1];
-        queue[tail--] = null;
+        queue[--tail] = null;
         this.size--;
         if (size <= queue.length / 4) {
             shrink();
@@ -57,7 +58,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     private void swapItems(int x, int y) {
-        if (x > size || y > size) throw new IllegalArgumentException("swap position out of range");
+        if (x > tail || y > tail) throw new IllegalArgumentException("swap position out of range");
+        if (x == y) return;
         Item temp = queue[x];
         queue[x] = queue[y];
         queue[y] = temp;
@@ -115,21 +117,18 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
-        // int n = 5;
-        // RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
-        // for (int i = 0; i < n; i++) {
-        //     queue.enqueue(i);
-        // }
-        // for (int a : queue) {
-        //     for (int b : queue) {
-        //         StdOut.print(a + "-" + b + " ");
-        //         StdOut.println();
-        //     }
-        // }
+        int n = 5;
+        RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
+        for (int i = 0; i < n; i++) {
+            queue.enqueue(i);
+        }
+        for (int a : queue) {
+            for (int b : queue) {
+                StdOut.print(a + "-" + b + " ");
+                StdOut.println();
+            }
+        }
 
-        RandomizedQueue<Integer> queue = new RandomizedQueue<>();
-        queue.enqueue(3);
-        System.out.println(queue.sample());
 
     }
 }
