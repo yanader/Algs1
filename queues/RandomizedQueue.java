@@ -1,4 +1,3 @@
-import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
@@ -59,6 +58,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // return a random item (but do not remove it)
     public Item sample() {
         if (isEmpty()) throw new NoSuchElementException("The queue is empty");
+        if (size == 1) return queue[0];
         return queue[StdRandom.uniformInt(this.size - 1)];
     }
 
@@ -124,28 +124,26 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // unit testing (required)
     public static void main(String[] args) {
 
+        // int n = 5;
+        // RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
+        // for (int i = 0; i < n; i++) {
+        //     queue.enqueue(i);
+        // }
+        // for (int a : queue) {
+        //     for (int b : queue) {
+        //         StdOut.print(a + "-" + b + " ");
+        //         StdOut.println();
+        //     }
+        // }
+
         /*
-        TODO
-        Need to go back through all the functions in here. There is something wrong that needs capturing.
-        Candidates:
-            Random number generation
-            tail manipulation
-            item swapping before dequeue
+        Stack trace below is suggesting that the error is coming from enqueue so I probably want to have a closer look a that.
 
-            Strong chance the iterator will need editing as well. Come back to this later.
-
+        RandomizedQueue.enqueue(RandomizedQueue.java:36)
+    TestRandomizedQueue.checkRandomIntermixedOperations(TestRandomizedQueue.java:113)
+    TestRandomizedQueue.test2(TestRandomizedQueue.java:912)
+    TestRandomizedQueue.main(TestRandomizedQueue.java:1400)
          */
-        int n = 5;
-        RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
-        for (int i = 0; i < n; i++) {
-            queue.enqueue(i);
-        }
-        for (int a : queue) {
-            for (int b : queue) {
-                StdOut.print(a + "-" + b + " ");
-                StdOut.println();
-            }
-        }
 
 
     }
