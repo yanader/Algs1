@@ -8,12 +8,10 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private Item[] queue;
     private int size;
-    private int tail;
 
     // construct an empty randomized queue
     public RandomizedQueue() {
         size = 0;
-        tail = 0;
         queue = (Item[]) new Object[10];
     }
 
@@ -33,18 +31,25 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if (queue.length == size) {
             grow();
         }
-        queue[tail++] = item;
-        this.size++;
+        queue[size++] = item;
     }
 
     // remove and return a random item
     public Item dequeue() {
         if (isEmpty()) throw new NoSuchElementException("The queue is empty");
-        int r = StdRandom.uniformInt(this.tail);
-        swapItems(r, this.tail - 1);
-        Item returnItem = queue[tail - 1];
-        queue[--tail] = null;
-        this.size--;
+
+        if (size == 1) {
+            Item returnItem = queue[0];
+            queue[0] = null;
+            return returnItem;
+        }
+
+        int r = StdRandom.uniformInt(this.size);
+        swapItems(r, this.size - 1);
+
+        Item returnItem = queue[size - 1];
+        queue[--size] = null;
+
         if (size <= queue.length / 4) {
             shrink();
         }
@@ -54,11 +59,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // return a random item (but do not remove it)
     public Item sample() {
         if (isEmpty()) throw new NoSuchElementException("The queue is empty");
-        return queue[StdRandom.uniformInt(this.tail)];
+        return queue[StdRandom.uniformInt(this.size - 1)];
     }
 
     private void swapItems(int x, int y) {
-        if (x > tail || y > tail) throw new IllegalArgumentException("swap position out of range");
+        if (x >= size || y >= size)
+            throw new IllegalArgumentException("swap position out of range");
         if (x == y) return;
         Item temp = queue[x];
         queue[x] = queue[y];
@@ -117,6 +123,18 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
+
+        /*
+        TODO
+        Need to go back through all the functions in here. There is something wrong that needs capturing.
+        Candidates:
+            Random number generation
+            tail manipulation
+            item swapping before dequeue
+
+            Strong chance the iterator will need editing as well. Come back to this later.
+
+         */
         int n = 5;
         RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
         for (int i = 0; i < n; i++) {
