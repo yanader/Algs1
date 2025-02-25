@@ -124,25 +124,23 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // unit testing (required)
     public static void main(String[] args) {
 
-        // int n = 5;
-        // RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
-        // for (int i = 0; i < n; i++) {
-        //     queue.enqueue(i);
-        // }
-        // for (int a : queue) {
-        //     for (int b : queue) {
-        //         StdOut.print(a + "-" + b + " ");
-        //         StdOut.println();
-        //     }
-        // }
-
         /*
-        Stack trace below is suggesting that the error is coming from enqueue so I probably want to have a closer look a that.
+         TODO
+            -public-
+          Constructor and attributes
+          isEmpty()
+          size()
+          enqueue()
+          dequeue()
+          sample()
+          (last) iterator
+            -private- (write as public to test)
+          swapItems()
+          grow()
+          shrink()
 
-        RandomizedQueue.enqueue(RandomizedQueue.java:36)
-    TestRandomizedQueue.checkRandomIntermixedOperations(TestRandomizedQueue.java:113)
-    TestRandomizedQueue.test2(TestRandomizedQueue.java:912)
-    TestRandomizedQueue.main(TestRandomizedQueue.java:1400)
+
+
          */
 
 
