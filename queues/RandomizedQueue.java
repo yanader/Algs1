@@ -60,7 +60,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public Item sample() {
         if (isEmpty()) throw new NoSuchElementException("The queue is empty");
         if (size == 1) return queue[0];
-        return queue[StdRandom.uniformInt(this.size - 1)];
+        return queue[StdRandom.uniformInt(this.size)];
     }
 
     private void swapItems(int x, int y) {
