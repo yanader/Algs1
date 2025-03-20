@@ -5,8 +5,8 @@ import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
 
-    private Item[] queue;
-    private int size;
+    Item[] queue;
+    int size;
 
     // construct an empty randomized queue
     public RandomizedQueue() {
@@ -40,6 +40,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if (size == 1) {
             Item returnItem = queue[0];
             queue[0] = null;
+            size--;
             return returnItem;
         }
 
@@ -124,12 +125,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // unit testing (required)
     public static void main(String[] args) {
 
+        RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
+        System.out.println(queue.size());
+        System.out.println(queue.isEmpty());
+
+
         /*
          TODO
             -public-
-          Constructor and attributes
-          isEmpty()
-          size()
           enqueue()
           dequeue()
           sample()
