@@ -43,7 +43,9 @@ public class BruteCollinearPoints {
                 }
             }
         }
-
+        //////////
+        // Double check whether or not this is needed
+        //////////
         LineSegment[] temp = new LineSegment[segmentCount];
         for (int i = 0; i < segmentCount; i++) {
             temp[i] = segments[i];
@@ -53,7 +55,7 @@ public class BruteCollinearPoints {
 
     // the number of line segments
     public int numberOfSegments() {
-        return -1;
+        return this.segmentCount;
     }
 
     // the line segments
@@ -61,7 +63,7 @@ public class BruteCollinearPoints {
         return null;
     }
 
-    private void gros() {
+    private void grow() {
         final int N = segments.length;
         LineSegment[] newArray = new LineSegment[N * 2];
         for (int i = 0; i < N; i++) {
