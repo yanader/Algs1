@@ -61,6 +61,15 @@ public class BruteCollinearPoints {
         return null;
     }
 
+    private void gros() {
+        final int N = segments.length;
+        LineSegment[] newArray = new LineSegment[N * 2];
+        for (int i = 0; i < N; i++) {
+            newArray[i] = segments[i];
+        }
+        segments = newArray;
+    }
+
     public static void main(String[] args) {
 
     }
