@@ -75,7 +75,7 @@ public class FastCollinearPoints {
 
     // the number of line segments
     public int numberOfSegments() {
-        return -1;
+        return this.segmentCount;
     }
 
     // the line segments
@@ -97,5 +97,6 @@ public class FastCollinearPoints {
 
     public static void main(String[] args) {
         // For testing
+        System.out.println("hello");
     }
 }
