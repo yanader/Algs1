@@ -80,7 +80,11 @@ public class FastCollinearPoints {
 
     // the line segments
     public LineSegment[] segments() {
-        return null;
+        LineSegment[] returnSegments = new LineSegment[segments.length];
+        for (int i = 0; i < returnSegments.length; i++) {
+            returnSegments[i] = segments[i];
+        }
+        return returnSegments;
     }
 
     private void trimSegmentArray() {
