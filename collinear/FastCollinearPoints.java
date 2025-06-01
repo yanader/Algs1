@@ -88,7 +88,11 @@ public class FastCollinearPoints {
     }
 
     private void trimSegmentArray() {
-
+        LineSegment[] temp = new LineSegment[segmentCount];
+        for (int i = 0; i < segmentCount; i++) {
+            temp[i] = segments[i];
+        }
+        segments = temp;
     }
 
     private double findSlope(Point p, Point[] points) {
