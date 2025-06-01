@@ -96,7 +96,18 @@ public class FastCollinearPoints {
     }
 
     private double findSlope(Point p, Point[] points) {
-        return -1.0;
+        int count = 0;
+        for (int i = 1; i < points.length; i++) {
+            double slope1 = p.slopeTo(points[i - 1]);
+            double slope2 = p.slopeTo(points[i]);
+            if (slope1 == slope2) {
+                count++;
+            }
+            if (count == 2) {
+                return slope2;
+            }
+        }
+        return 9.9;
     }
 
     private void grow() {
