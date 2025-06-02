@@ -20,8 +20,19 @@ public class BruteCollinearPoints {
         if (points == null) {
             throw new IllegalArgumentException("Null argument failure.");
         }
+        for (int i = 0; i < points.length; i++) {
+            if (points[i] == null) {
+                throw new IllegalArgumentException("Null point in array");
+            }
+        }
+        for (int i = 0; i < points.length; i++) {
+            for (int j = i + 1; j < points.length; j++) {
+                if (points[i].compareTo(points[j]) == 0) {
+                    throw new IllegalArgumentException("Duplicate points");
+                }
+            }
+        }
 
-        Arrays.sort(points);
         this.segmentCount = 0;
         segments = new LineSegment[10];
         final int N = points.length;
@@ -47,11 +58,11 @@ public class BruteCollinearPoints {
                                     pointsCopy[p1], pointsCopy[p2], pointsCopy[p3], pointsCopy[p4]
                             };
                             Arrays.sort(collinear);
-                            segments[segmentCount++] = new LineSegment(collinear[p1],
-                                                                       collinear[p4]);
                             if (segmentCount == segments.length) {
                                 grow();
                             }
+                            segments[segmentCount++] = new LineSegment(collinear[0],
+                                                                       collinear[3]);
                         }
                     }
                 }
