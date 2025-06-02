@@ -20,10 +20,19 @@ public class BruteCollinearPoints {
         if (points == null) {
             throw new IllegalArgumentException("Null argument failure.");
         }
+
         Arrays.sort(points);
         this.segmentCount = 0;
         segments = new LineSegment[10];
         final int N = points.length;
+
+        // Create a copy of the Points array argument and use that
+        // Point[] pointsCopy = new Point[N];
+        // for (int i = 0; i < N; i++) {
+        //     pointsCopy[i] = points[i];
+        // }
+
+
         for (int p1 = 0; p1 < N; p1++) {
             for (int p2 = p1 + 1; p2 < N; p2++) {
                 for (int p3 = p2 + 1; p3 < N; p3++) {
@@ -63,11 +72,7 @@ public class BruteCollinearPoints {
 
     // the line segments
     public LineSegment[] segments() {
-        LineSegment[] returnSegments = new LineSegment[segments.length];
-        for (int i = 0; i < returnSegments.length; i++) {
-            returnSegments[i] = segments[i];
-        }
-        return returnSegments;
+        return Arrays.copyOf(segments, segmentCount);
     }
 
     private void grow() {
@@ -106,6 +111,11 @@ public class BruteCollinearPoints {
             segment.draw();
         }
         StdDraw.show();
+
+        // for (int i = 0; i < points.length; i++) {
+        //     System.out.println(points[i]);
+        // }
+
     }
 }
 
