@@ -26,27 +26,29 @@ public class BruteCollinearPoints {
         segments = new LineSegment[10];
         final int N = points.length;
 
-        // Create a copy of the Points array argument and use that
-        // Point[] pointsCopy = new Point[N];
-        // for (int i = 0; i < N; i++) {
-        //     pointsCopy[i] = points[i];
-        // }
+        Point[] pointsCopy = points.clone();
+        Arrays.sort(pointsCopy);
 
 
         for (int p1 = 0; p1 < N; p1++) {
             for (int p2 = p1 + 1; p2 < N; p2++) {
                 for (int p3 = p2 + 1; p3 < N; p3++) {
                     for (int p4 = p3 + 1; p4 < N; p4++) {
-                        double slope1 = points[p1].slopeTo(points[p2]);
-                        double slope2 = points[p1].slopeTo(points[p3]);
-                        double slope3 = points[p1].slopeTo(points[p4]);
+                        double slope1 = pointsCopy[p1].slopeTo(pointsCopy[p2]);
+                        double slope2 = pointsCopy[p1].slopeTo(pointsCopy[p3]);
+                        double slope3 = pointsCopy[p1].slopeTo(pointsCopy[p4]);
 
                         // Because we have 5 Points on the same slope, we are checking,
                         // and adding, the segment multiple times.
 
-                        if (slope1 == slope2 && slope1 == slope3) {
-                            segments[segmentCount] = new LineSegment(points[p1], points[p4]);
-                            segmentCount++;
+                        if (Double.compare(slope1, slope2) == 0
+                                && Double.compare(slope1, slope3) == 0) {
+                            Point[] collinear = {
+                                    pointsCopy[p1], pointsCopy[p2], pointsCopy[p3], pointsCopy[p4]
+                            };
+                            Arrays.sort(collinear);
+                            segments[segmentCount++] = new LineSegment(collinear[p1],
+                                                                       collinear[p4]);
                             if (segmentCount == segments.length) {
                                 grow();
                             }
