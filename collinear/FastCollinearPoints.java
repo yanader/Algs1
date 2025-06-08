@@ -12,6 +12,7 @@ import java.util.Arrays;
 
 public class FastCollinearPoints {
 
+    private static final int INITIAL_SIZE = 10;
     private int segmentCount;
     private LineSegment[] segments;
 
@@ -34,57 +35,60 @@ public class FastCollinearPoints {
         }
 
 
-        Arrays.sort(points);
         this.segmentCount = 0;
-        segments = new LineSegment[10];
+        segments = new LineSegment[INITIAL_SIZE];
         final int N = points.length;
 
         // create a copy
 
-        Point[] pointsCopy = new Point[N];
-        for (int i = 0; i < N; i++) {
-            pointsCopy[i] = points[i];
-        }
+        Point[] pointsCopy = points.clone();
+        Arrays.sort(pointsCopy);
 
         // Loop over each point in the original array and, for each,
         // sort the copy in slope order relative to the current point in the loop
 
         for (int i = 0; i < N; i++) {
+            // Sort pointsCopy in slope order relative to points[i] - each in turn
             Arrays.sort(pointsCopy, points[i].slopeOrder());
-            double slope = findSlope(points[i], pointsCopy);
+            double slope;
 
-            if (slope != 9.9) {
-                // Once a slope has been found, sort the array by (x,y) coordinate (standard sort)
-                Arrays.sort(pointsCopy);
+            try {
+                slope = findSlope(points[i], pointsCopy);
+            }
+            catch (IllegalStateException e) {
+                continue;
+            }
 
-                // Take the first and last point that have either the current slope of -infinity
-                Point first = null;
-                Point last = null;
-                boolean firstNeeded = true;
+            // Once a slope has been found, sort the array by (x,y) coordinate (standard sort)
+            Arrays.sort(pointsCopy);
 
-                for (int j = 0; j < pointsCopy.length; j++) {
-                    if (points[i].slopeTo(pointsCopy[j]) == slope
-                            || points[i].slopeTo(pointsCopy[j]) == Double.NEGATIVE_INFINITY) {
-                        if (firstNeeded) {
-                            first = pointsCopy[j];
-                            firstNeeded = false;
-                        }
-                        else {
-                            last = pointsCopy[j];
-                        }
+            // Take the first and last point that have either the current slope or -infinity
+            Point first = null;
+            Point last = null;
+            boolean firstNeeded = true;
+
+            for (int j = 0; j < pointsCopy.length; j++) {
+                if (points[i].slopeTo(pointsCopy[j]) == slope
+                        || points[i].slopeTo(pointsCopy[j]) == Double.NEGATIVE_INFINITY) {
+                    if (firstNeeded) {
+                        first = pointsCopy[j];
+                        firstNeeded = false;
+                    }
+                    else {
+                        last = pointsCopy[j];
                     }
                 }
+            }
 
-                LineSegment ls = new LineSegment(first, last);
+            LineSegment ls = new LineSegment(first, last);
 
-                if (segmentCount == segments.length) {
-                    grow();
-                }
+            if (segmentCount == segments.length) {
+                grow();
+            }
 
-                if (first == points[i]) {
-                    segments[segmentCount] = ls;
-                    segmentCount++;
-                }
+            if (first == points[i]) {
+                segments[segmentCount] = ls;
+                segmentCount++;
             }
 
         }
@@ -125,7 +129,7 @@ public class FastCollinearPoints {
                 return slope2;
             }
         }
-        return 9.9;
+        throw new IllegalStateException("No matching slope found");
     }
 
     private void grow() {
