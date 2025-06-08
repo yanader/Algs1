@@ -20,6 +20,20 @@ public class FastCollinearPoints {
         if (points == null) {
             throw new IllegalArgumentException("Null argument failure");
         }
+        for (int i = 0; i < points.length; i++) {
+            if (points[i] == null) {
+                throw new IllegalArgumentException("Null point in array");
+            }
+        }
+        for (int i = 0; i < points.length; i++) {
+            for (int j = i + 1; j < points.length; j++) {
+                if (points[i].compareTo(points[j]) == 0) {
+                    throw new IllegalArgumentException("Duplicate points");
+                }
+            }
+        }
+
+
         Arrays.sort(points);
         this.segmentCount = 0;
         segments = new LineSegment[10];
